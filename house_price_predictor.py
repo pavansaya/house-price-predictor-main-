@@ -2,45 +2,22 @@ import streamlit as st
 import numpy as np
 from sklearn.linear_model import LinearRegression
 
-# Optional: Background
-def set_bg():
-    st.markdown(
-        f"""
-         <style>
-         .stApp {{
-             background-image: url("https://i.imgur.com/ok4x0aS.jpg");
-             background-size: cover;
-             background-repeat: no-repeat;
-             background-attachment: fixed;
-         }}
-         </style>
-         """,
-        unsafe_allow_html=True
-    )
-
-# Dummy model training
+# Dummy training data
 model = LinearRegression()
-X = np.array([[1000, 2], [1500, 3], [2000, 4]])
-y = np.array([50, 80, 120])
+X = np.array([[1000, 2], [1500, 3], [2000, 4]])  # [area, bedrooms]
+y = np.array([50, 80, 120])  # price in lakhs
 model.fit(X, y)
 
 def main():
-    set_bg()
-    st.set_page_config(page_title="🏡 House Price Predictor", layout="centered")
-    st.markdown("<h1 style='text-align: center; color: #2e86de;'>🏠 House Price Predictor</h1>", unsafe_allow_html=True)
-    st.markdown("### 💬 Enter the details below to estimate house price:")
+    st.title("🏠 House Price Predictor")
+    st.markdown("Enter the details below to estimate the house price:")
 
-    st.sidebar.header("📋 Input Parameters")
-    area = st.sidebar.number_input("📏 Area (sq ft)", min_value=300, max_value=10000, step=100)
-    bedrooms = st.sidebar.slider("🛏️ Bedrooms", 1, 10)
+    area = st.number_input("Area (in sq ft)", min_value=300, max_value=10000)
+    bedrooms = st.slider("Number of bedrooms", 1, 10)
 
-    if st.sidebar.button("🔮 Predict"):
+    if st.button("Predict Price"):
         prediction = model.predict([[area, bedrooms]])
-        st.markdown("---")
-        st.success(f"💰 **Estimated Price:** ₹ {prediction[0]:,.2f} lakhs")
-
-    st.markdown("---")
-    st.markdown("<small>Made with ❤️ using Streamlit | Powered by Linear Regression</small>", unsafe_allow_html=True)
+        st.success(f"Estimated Price: ₹ {prediction[0]:,.2f} lakhs")
 
 if __name__ == "__main__":
     main()
