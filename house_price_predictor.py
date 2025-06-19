@@ -1,28 +1,22 @@
-import pandas as pd
-
-# Create a simple dataset
-data = {
-    'Size (sqft)': [1000, 1500, 2000, 2500, 3000],
-    'Bedrooms': [2, 3, 3, 4, 4],
-    'Price (Lacs)': [50, 75, 100, 125, 150]
-}
-
-df = pd.DataFrame(data)
-print(df)
-
-
+import streamlit as st
+import numpy as np
 from sklearn.linear_model import LinearRegression
 
-# Features (X) and Labels (Y)
-X = df[['Size (sqft)', 'Bedrooms']]
-Y = df['Price (Lacs)']
-
-# Train model
 model = LinearRegression()
-model.fit(X, Y)
+X = np.array([[1000, 2], [1500, 3], [2000, 4]])
+y = np.array([50, 80, 120])
+model.fit(X, y)
 
-# Predict price for 2200 sqft, 3 bedrooms
-predicted = model.predict([[2200, 3]])
-print("Predicted Price: ", predicted[0], "Lacs")
+def main():
+    st.title("🏠 House Price Predictor")
+    st.markdown("Enter the details below to estimate the house price:")
 
+    area = st.number_input("Area (in sq ft)", min_value=300, max_value=10000)
+    bedrooms = st.slider("Number of bedrooms", 1, 10)
 
+    if st.button("Predict Price"):
+        prediction = model.predict([[area, bedrooms]])
+        st.success(f"Estimated Price: ₹ {prediction[0]:,.2f} lakhs")
+
+if __name__ == "__main__":
+    main()
